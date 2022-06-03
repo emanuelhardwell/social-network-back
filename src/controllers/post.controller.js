@@ -16,11 +16,14 @@ cloudinary.config({
  * get posts
  */
 
-postObj.getPosts = (req, res = response) => {
+postObj.getPosts = async (req, res = response) => {
   try {
+    const posts = await Post.find();
+
     res.status(200).json({
       ok: true,
       msg: "Posts get successfully",
+      posts,
     });
   } catch (error) {
     res.status(500).json({
@@ -134,7 +137,6 @@ postObj.updatePost = async (req, res = response) => {
       });
     }
 
-    console.log(postSearch.imageId);
     await cloudinary.v2.uploader.destroy(postSearch.imageId);
 
     const result = await cloudinary.v2.uploader.upload(file.tempFilePath, {
@@ -159,7 +161,7 @@ postObj.updatePost = async (req, res = response) => {
 
     return res.status(200).json({
       ok: true,
-      msg: "Post created successfully",
+      msg: "Post updated successfully",
       post,
     });
   } catch (error) {
@@ -174,8 +176,29 @@ postObj.updatePost = async (req, res = response) => {
 /**
  * delete post
  */
-postObj.deletePost = (req, res = response) => {
+postObj.deletePost = async (req, res = response) => {
+  const { id } = req.params;
+
   try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({
+        ok: false,
+        msg: "Id not valid",
+      });
+    }
+
+    const postSearch = await Post.findById(id);
+
+    if (!postSearch) {
+      return res.status(404).json({
+        ok: false,
+        msg: "This post not exist",
+      });
+    }
+
+    await Post.findByIdAndDelete(id);
+    await cloudinary.v2.uploader.destroy(postSearch.imageId);
+
     res.status(200).json({
       ok: true,
       msg: "Post deleted successfully",
