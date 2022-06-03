@@ -3,6 +3,7 @@ const { dbConnection } = require("./db/db");
 require("dotenv").config();
 const cors = require("cors");
 const morgan = require("morgan");
+const fileupload = require("express-fileupload");
 
 const app = express();
 
@@ -11,10 +12,11 @@ dbConnection();
 
 // cors
 app.use(cors());
-app.use(morgan("dev"));
 
 // middlewares
 app.use(express.json());
+app.use(morgan("dev"));
+app.use(fileupload({ useTempFiles: true, tempFileDir: "/tmp/" }));
 
 // rutas
 app.use("/api/v1/auth", require("./routes/auth.routes"));
