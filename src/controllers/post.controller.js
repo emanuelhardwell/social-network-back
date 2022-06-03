@@ -2,6 +2,7 @@ const { response } = require("express");
 const cloudinary = require("cloudinary");
 const fs = require("fs-extra");
 const Post = require("../models/Post.model");
+const mongoose = require("mongoose");
 
 const postObj = {};
 
@@ -37,7 +38,7 @@ postObj.createPost = async (req, res = response) => {
   const { uid } = req;
 
   try {
-    if (!req.files || Object.keys(req.files).length === 0) {
+    if (!req.files || !req.files.image || Object.keys(req.files).length === 0) {
       return res.status(400).json({
         ok: false,
         msg: "No files were uploaded",
@@ -90,11 +91,76 @@ postObj.createPost = async (req, res = response) => {
 /**
  * update post
  */
-postObj.updatePost = (req, res = response) => {
+postObj.updatePost = async (req, res = response) => {
+  const { id } = req.params;
+
   try {
-    res.status(200).json({
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({
+        ok: false,
+        msg: "Id not valid",
+      });
+    }
+
+    const postSearch = await Post.findById(id);
+
+    if (!postSearch) {
+      return res.status(404).json({
+        ok: false,
+        msg: "This post not exist",
+      });
+    }
+
+    if (!req.files || !req.files.image || Object.keys(req.files).length === 0) {
+      return res.status(400).json({
+        ok: false,
+        msg: "No files were uploaded",
+      });
+    }
+
+    const file = req.files.image;
+
+    if (file.size > 2000000) {
+      return res.status(400).json({
+        ok: false,
+        msg: "Imagen demasiado grande",
+      });
+    }
+
+    if (file.mimetype !== "image/jpeg" && file.mimetype !== "image/png") {
+      return res.status(400).json({
+        ok: false,
+        msg: "El formato de imagen es incorrecto",
+      });
+    }
+
+    console.log(postSearch.imageId);
+    await cloudinary.v2.uploader.destroy(postSearch.imageId);
+
+    const result = await cloudinary.v2.uploader.upload(file.tempFilePath, {
+      folder: "social-network",
+    });
+
+    const url = result.secure_url;
+    const publicId = result.public_id;
+
+    const post = await Post.findByIdAndUpdate(
+      id,
+      {
+        imageUrl: url,
+        imageId: publicId,
+        tags: req.body.tags.split(","),
+        ...req.body,
+      },
+      { new: true }
+    );
+
+    await fs.unlink(file.tempFilePath);
+
+    return res.status(200).json({
       ok: true,
-      msg: "Post updated successfully",
+      msg: "Post created successfully",
+      post,
     });
   } catch (error) {
     res.status(500).json({

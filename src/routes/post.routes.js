@@ -32,7 +32,6 @@ router.put(
   [
     check("title", "the title is required").notEmpty(),
     check("description", "the description is required").notEmpty(),
-    check("image", "the image is required").notEmpty(),
     check("tags", "the tags is required").notEmpty(),
     validateInputs,
   ],
