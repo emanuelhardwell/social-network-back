@@ -18,6 +18,7 @@ app.use(express.json());
 
 // rutas
 app.use("/api/v1/auth", require("./routes/auth.routes"));
+app.use("/api/v1/post", require("./routes/post.routes"));
 
 app.listen(process.env.PORT || 4000, () =>
   console.log(`Server running in the port ${process.env.PORT}`)
