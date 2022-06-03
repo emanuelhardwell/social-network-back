@@ -1,4 +1,6 @@
 const { Router } = require("express");
+const { validateJWT } = require("../middlewares/validate-jwt");
+
 const {
   createUser,
   loginUser,
@@ -26,6 +28,6 @@ router.post("/login", loginUser);
  * @url /renew
  * renew token
  */
-router.get("/renew", renewToken);
+router.get("/renew", validateJWT, renewToken);
 
 module.exports = router;
