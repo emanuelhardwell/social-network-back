@@ -37,7 +37,7 @@ postObj.getPosts = async (req, res = response) => {
  * ******************** GET POSTS BY SEARCH  ********************
  */
 postObj.getPostsBySearch = async (req, res = response) => {
-  const { searchQuery, tags } = req.query;
+  let { searchQuery, tags } = req.query;
 
   let title = new RegExp(searchQuery, "i");
 
@@ -48,6 +48,7 @@ postObj.getPostsBySearch = async (req, res = response) => {
     }
 
     if (tags) {
+      tags = tags.toLowerCase();
       posts = await Post.find({
         $or: [{ title }, { tags: { $in: tags.split(",") } }],
       });
