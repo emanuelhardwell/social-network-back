@@ -16,51 +16,53 @@ const router = Router();
 
 router.use(validateJWT);
 
+// API -----> /api/v1/post
+
 /**
- * GET
+ * ******************** GET POSTS  ********************
  */
 router.get("/", getPosts);
 
 /**
- * GET
+ * ******************** GET POSTS PAGINATE ********************
  */
 router.get("/posts", getPostsPaginate);
 
 /**
- * POST
+ * ******************** CREATE POST  ********************
  */
 router.post(
   "/",
   [
-    check("title", "the title is required").notEmpty(),
-    check("description", "the description is required").notEmpty(),
-    check("tags", "the tags is required").notEmpty(),
+    check("title", "El titulo es obligatorio").notEmpty(),
+    check("description", "La descripción es obligatoria").notEmpty(),
+    check("tags", "Los tags son obligatorios").notEmpty(),
     validateInputs,
   ],
   createPost
 );
 
 /**
- * PUT
+ * ******************** UPDATE POST  ********************
  */
 router.put(
   "/:id",
   [
-    check("title", "the title is required").notEmpty(),
-    check("description", "the description is required").notEmpty(),
-    check("tags", "the tags is required").notEmpty(),
+    check("title", "El titulo es obligatorio").notEmpty(),
+    check("description", "La descripción es obligatoria").notEmpty(),
+    check("tags", "Los tags son obligatorios").notEmpty(),
     validateInputs,
   ],
   updatePost
 );
 
 /**
- * PUT LIKE
+ * ******************** UPDATE POST  ********************
  */
 router.put("/like/:id", likePost);
 
 /**
- * DELETE
+ * ******************** DELETE POST  ********************
  */
 router.delete("/:id", deletePost);
 

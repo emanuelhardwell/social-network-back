@@ -13,9 +13,8 @@ cloudinary.config({
 });
 
 /**
- * get posts
+ * ******************** GET POSTS  ********************
  */
-
 postObj.getPosts = async (req, res = response) => {
   try {
     const posts = await Post.find();
@@ -35,9 +34,8 @@ postObj.getPosts = async (req, res = response) => {
 };
 
 /**
- * get posts paginate
+ * ******************** GET POSTS PAGINATE ********************
  */
-
 postObj.getPostsPaginate = async (req, res = response) => {
   const { page } = req.query;
 
@@ -70,7 +68,7 @@ postObj.getPostsPaginate = async (req, res = response) => {
 };
 
 /**
- * create post
+ * ******************** CREATE POST  ********************
  */
 postObj.createPost = async (req, res = response) => {
   const { uid } = req;
@@ -127,7 +125,7 @@ postObj.createPost = async (req, res = response) => {
 };
 
 /**
- * update post
+ * ******************** UPDATE POST  ********************
  */
 postObj.updatePost = async (req, res = response) => {
   const { id } = req.params;
@@ -209,7 +207,7 @@ postObj.updatePost = async (req, res = response) => {
 };
 
 /**
- * delete post
+ * ******************** DELETE POST  ********************
  */
 postObj.deletePost = async (req, res = response) => {
   const { id } = req.params;
@@ -246,8 +244,9 @@ postObj.deletePost = async (req, res = response) => {
     console.log(error);
   }
 };
+
 /**
- * like post
+ * ******************** LIKE POST  ********************
  */
 postObj.likePost = async (req, res = response) => {
   const { id } = req.params;

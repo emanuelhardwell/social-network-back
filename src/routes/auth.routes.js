@@ -11,43 +11,45 @@ const {
 
 const router = Router();
 
+//  API -----> /api/v1/auth
+
 /**
- * API /api/v1/auth
- * @url /new
- * create user
+ * ******************** CREATE USER  ********************
  */
 router.post(
   "/new",
   [
-    check("name", "the name is required").notEmpty(),
-    check("lastname", "the lastname is required").notEmpty(),
-    check("lastname2", "the lastname2 is required").notEmpty(),
-    check("email", "the email is required").notEmpty(),
-    check("password", "the password is required").isLength({ min: 6 }),
+    check("name", "El nombre es obligatorio").notEmpty(),
+    check("lastname", "El apellido paterno es obligatorio").notEmpty(),
+    check("lastname2", "El apellido materno es obligatorio").notEmpty(),
+    check("email", "El correo es obligatorio").notEmpty(),
+    check(
+      "password",
+      "La contraseña es obligatoria y debe ser mayor o igual a 6 caracteres"
+    ).isLength({ min: 6 }),
     validateInputs,
   ],
   createUser
 );
 
 /**
- * API /api/v1/auth
- * @url /login
- * login user
+ * ******************** LOGIN USER  ********************
  */
 router.post(
   "/login",
   [
-    check("email", "the email is required").notEmpty(),
-    check("password", "the password is required").isLength({ min: 6 }),
+    check("email", "El correo es obligatorio").notEmpty(),
+    check(
+      "password",
+      "La contraseña es obligatoria y debe ser mayor o igual a 6 caracteres"
+    ).isLength({ min: 6 }),
     validateInputs,
   ],
   loginUser
 );
 
 /**
- * API /api/v1/auth
- * @url /renew
- * renew token
+ * ******************** RENEW TOKEN USER  ********************
  */
 router.get("/renew", validateJWT, renewToken);
 

@@ -5,6 +5,10 @@ const jwt = require("jsonwebtoken");
 
 const authObj = {};
 
+/**
+ * ******************** CREATE USER  ********************
+ */
+
 authObj.createUser = async (req, res = response) => {
   const { email, password } = req.body;
 
@@ -44,6 +48,9 @@ authObj.createUser = async (req, res = response) => {
   }
 };
 
+/**
+ * ******************** LOGIN USER  ********************
+ */
 authObj.loginUser = async (req, res = response) => {
   const { password, email } = req.body;
 
@@ -88,6 +95,9 @@ authObj.loginUser = async (req, res = response) => {
   }
 };
 
+/**
+ * ******************** RENEW TOKEN USER  ********************
+ */
 authObj.renewToken = async (req, res = response) => {
   const { uid, name } = req;
 
