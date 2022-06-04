@@ -38,11 +38,8 @@ postObj.getPosts = async (req, res = response) => {
  */
 postObj.getPostsBySearch = async (req, res = response) => {
   const { searchQuery, tags } = req.query;
-  console.log(searchQuery);
-  console.log(tags);
 
   let title = new RegExp(searchQuery, "i");
-  console.log("title:", title);
 
   try {
     let posts;
@@ -75,9 +72,9 @@ postObj.getPostsBySearch = async (req, res = response) => {
 };
 
 /**
- * ******************** GET POSTS PAGINATE ********************
+ * ******************** GET POSTS BY PAGINATION ********************
  */
-postObj.getPostsPaginate = async (req, res = response) => {
+postObj.getPostsByPagination = async (req, res = response) => {
   const { page } = req.query;
 
   try {
@@ -94,7 +91,7 @@ postObj.getPostsPaginate = async (req, res = response) => {
 
     res.status(200).json({
       ok: true,
-      msg: "Posts paginate get successfully",
+      msg: "Posts pagination get successfully",
       posts: postsGet,
       currentPage: Number(page),
       numberOfPages,

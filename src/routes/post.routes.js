@@ -6,8 +6,8 @@ const {
   updatePost,
   deletePost,
   likePost,
-  getPostsPaginate,
   getPostsBySearch,
+  getPostsByPagination,
 } = require("../controllers/post.controller");
 const { check } = require("express-validator");
 const { validateInputs } = require("../middlewares/validate-inputs");
@@ -25,14 +25,14 @@ router.use(validateJWT);
 router.get("/", getPosts);
 
 /**
- * ******************** GET POSTS BY SERACH  ********************
+ * ******************** GET POSTS BY SEARCH  ********************
  */
 router.get("/search", getPostsBySearch);
 
 /**
- * ******************** GET POSTS PAGINATE ********************
+ * ******************** GET POSTS BY PAGINATION ********************
  */
-router.get("/posts", getPostsPaginate);
+router.get("/posts", getPostsByPagination);
 
 /**
  * ******************** CREATE POST  ********************
@@ -63,7 +63,7 @@ router.put(
 );
 
 /**
- * ******************** UPDATE POST  ********************
+ * ******************** LIKE POST  ********************
  */
 router.put("/like/:id", likePost);
 
