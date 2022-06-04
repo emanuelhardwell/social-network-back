@@ -7,6 +7,7 @@ const {
   deletePost,
   likePost,
   getPostsPaginate,
+  getPostsBySearch,
 } = require("../controllers/post.controller");
 const { check } = require("express-validator");
 const { validateInputs } = require("../middlewares/validate-inputs");
@@ -22,6 +23,11 @@ router.use(validateJWT);
  * ******************** GET POSTS  ********************
  */
 router.get("/", getPosts);
+
+/**
+ * ******************** GET POSTS BY SERACH  ********************
+ */
+router.get("/search", getPostsBySearch);
 
 /**
  * ******************** GET POSTS PAGINATE ********************

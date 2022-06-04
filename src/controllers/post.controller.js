@@ -34,6 +34,47 @@ postObj.getPosts = async (req, res = response) => {
 };
 
 /**
+ * ******************** GET POSTS BY SEARCH  ********************
+ */
+postObj.getPostsBySearch = async (req, res = response) => {
+  const { searchQuery, tags } = req.query;
+  console.log(searchQuery);
+  console.log(tags);
+
+  let title = new RegExp(searchQuery, "i");
+  console.log("title:", title);
+
+  try {
+    let posts;
+    if (!searchQuery || searchQuery === "") {
+      title = "";
+    }
+
+    if (tags) {
+      posts = await Post.find({
+        $or: [{ title }, { tags: { $in: tags.split(",") } }],
+      });
+    } else {
+      posts = await Post.find({
+        $or: [{ title }],
+      });
+    }
+
+    res.status(200).json({
+      ok: true,
+      msg: "Posts search get successfully",
+      posts,
+    });
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      msg: "Contacting the admin",
+    });
+    console.log(error);
+  }
+};
+
+/**
  * ******************** GET POSTS PAGINATE ********************
  */
 postObj.getPostsPaginate = async (req, res = response) => {
