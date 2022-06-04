@@ -6,6 +6,7 @@ const {
   updatePost,
   deletePost,
   likePost,
+  getPostsPaginate,
 } = require("../controllers/post.controller");
 const { check } = require("express-validator");
 const { validateInputs } = require("../middlewares/validate-inputs");
@@ -19,6 +20,11 @@ router.use(validateJWT);
  * GET
  */
 router.get("/", getPosts);
+
+/**
+ * GET
+ */
+router.get("/posts", getPostsPaginate);
 
 /**
  * POST

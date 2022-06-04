@@ -32,7 +32,7 @@ const postSchema = Schema(
     ],
     createdAtDate: {
       type: Date,
-      default: new Date().toString(),
+      default: new Date().toISOString(),
     },
     user: {
       type: Schema.Types.ObjectId,

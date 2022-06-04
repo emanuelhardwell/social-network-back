@@ -35,6 +35,41 @@ postObj.getPosts = async (req, res = response) => {
 };
 
 /**
+ * get posts paginate
+ */
+
+postObj.getPostsPaginate = async (req, res = response) => {
+  const { page } = req.query;
+
+  try {
+    const posts = await Post.countDocuments();
+
+    const LIMIT = 4;
+    const startIndex = (Number(page) - 1) * LIMIT;
+    const numberOfPages = Math.ceil(posts / LIMIT);
+
+    const postsGet = await Post.find()
+      .sort({ _id: -1 })
+      .limit(LIMIT)
+      .skip(startIndex);
+
+    res.status(200).json({
+      ok: true,
+      msg: "Posts paginate get successfully",
+      posts: postsGet,
+      currentPage: Number(page),
+      numberOfPages,
+    });
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      msg: "Contacting the admin",
+    });
+    console.log(error);
+  }
+};
+
+/**
  * create post
  */
 postObj.createPost = async (req, res = response) => {
