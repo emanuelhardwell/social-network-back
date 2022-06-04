@@ -5,6 +5,7 @@ const {
   createPost,
   updatePost,
   deletePost,
+  likePost,
 } = require("../controllers/post.controller");
 const { check } = require("express-validator");
 const { validateInputs } = require("../middlewares/validate-inputs");
@@ -14,8 +15,14 @@ const router = Router();
 
 router.use(validateJWT);
 
+/**
+ * GET
+ */
 router.get("/", getPosts);
 
+/**
+ * POST
+ */
 router.post(
   "/",
   [
@@ -27,6 +34,9 @@ router.post(
   createPost
 );
 
+/**
+ * PUT
+ */
 router.put(
   "/:id",
   [
@@ -38,6 +48,14 @@ router.put(
   updatePost
 );
 
+/**
+ * PUT LIKE
+ */
+router.put("/like/:id", likePost);
+
+/**
+ * DELETE
+ */
 router.delete("/:id", deletePost);
 
 module.exports = router;

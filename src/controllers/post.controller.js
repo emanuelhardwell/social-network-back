@@ -149,10 +149,10 @@ postObj.updatePost = async (req, res = response) => {
     const post = await Post.findByIdAndUpdate(
       id,
       {
+        ...req.body,
         imageUrl: url,
         imageId: publicId,
         tags: req.body.tags.split(","),
-        ...req.body,
       },
       { new: true }
     );
@@ -202,6 +202,55 @@ postObj.deletePost = async (req, res = response) => {
     res.status(200).json({
       ok: true,
       msg: "Post deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      msg: "Contacting the admin",
+    });
+    console.log(error);
+  }
+};
+/**
+ * like post
+ */
+postObj.likePost = async (req, res = response) => {
+  const { id } = req.params;
+  const uid = req.uid;
+
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({
+        ok: false,
+        msg: "Id not valid",
+      });
+    }
+
+    const post = await Post.findById(id);
+
+    if (!post) {
+      return res.status(404).json({
+        ok: false,
+        msg: "This post not exist",
+      });
+    }
+
+    const index = post.likes.findIndex((id) => String(id) === uid);
+
+    if (index === -1) {
+      post.likes.push(uid);
+    } else {
+      post.likes = post.likes.filter((id) => String(id) !== uid);
+    }
+
+    const postUpdated = await Post.findByIdAndUpdate(id, post, {
+      new: true,
+    });
+
+    res.status(200).json({
+      ok: true,
+      msg: "Post like+ successfully",
+      post: postUpdated,
     });
   } catch (error) {
     res.status(500).json({
