@@ -17,17 +17,20 @@ cloudinary.config({
  */
 postObj.getPosts = async (req, res = response) => {
   try {
-    const posts = await Post.find();
+    const posts = await Post.find().populate({
+      path: "user",
+      select: "name",
+    });
 
     res.status(200).json({
       ok: true,
-      msg: "Posts get successfully",
+      msg: "Publicaciones obtenidas",
       posts,
     });
   } catch (error) {
     res.status(500).json({
       ok: false,
-      msg: "Contacting the admin",
+      msg: "Contacte al administrador",
     });
     console.log(error);
   }
@@ -60,13 +63,13 @@ postObj.getPostsBySearch = async (req, res = response) => {
 
     res.status(200).json({
       ok: true,
-      msg: "Posts search get successfully",
+      msg: "Publicaciones por busqueda obtenidas ",
       posts,
     });
   } catch (error) {
     res.status(500).json({
       ok: false,
-      msg: "Contacting the admin",
+      msg: "Contacte al administrador",
     });
     console.log(error);
   }
@@ -92,7 +95,7 @@ postObj.getPostsByPagination = async (req, res = response) => {
 
     res.status(200).json({
       ok: true,
-      msg: "Posts pagination get successfully",
+      msg: "Publicaciones por paginación obtenidas",
       posts: postsGet,
       currentPage: Number(page),
       numberOfPages,
@@ -100,7 +103,7 @@ postObj.getPostsByPagination = async (req, res = response) => {
   } catch (error) {
     res.status(500).json({
       ok: false,
-      msg: "Contacting the admin",
+      msg: "Contacte al administrador",
     });
     console.log(error);
   }
@@ -116,7 +119,7 @@ postObj.createPost = async (req, res = response) => {
     if (!req.files || !req.files.image || Object.keys(req.files).length === 0) {
       return res.status(400).json({
         ok: false,
-        msg: "No files were uploaded",
+        msg: "Imagen no cargada",
       });
     }
 
@@ -147,17 +150,21 @@ postObj.createPost = async (req, res = response) => {
     post.user = uid;
 
     const postSaved = await post.save();
+    const postPopulate = await Post.findById(postSaved._id).populate({
+      path: "user",
+      select: "name",
+    });
     await fs.unlink(file.tempFilePath);
 
     return res.status(200).json({
       ok: true,
-      msg: "Post created successfully",
-      post: postSaved,
+      msg: "Publicación creada",
+      post: postPopulate,
     });
   } catch (error) {
     res.status(500).json({
       ok: false,
-      msg: "Contacting the admin",
+      msg: "Contacte al administrador",
     });
     console.log(error);
   }
@@ -173,7 +180,7 @@ postObj.updatePost = async (req, res = response) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(404).json({
         ok: false,
-        msg: "Id not valid",
+        msg: "Id no valido",
       });
     }
 
@@ -182,14 +189,14 @@ postObj.updatePost = async (req, res = response) => {
     if (!postSearch) {
       return res.status(404).json({
         ok: false,
-        msg: "This post not exist",
+        msg: "Esta publicación no existe",
       });
     }
 
     if (!req.files || !req.files.image || Object.keys(req.files).length === 0) {
       return res.status(400).json({
         ok: false,
-        msg: "No files were uploaded",
+        msg: "Imagen no seleccionada",
       });
     }
 
@@ -227,19 +234,22 @@ postObj.updatePost = async (req, res = response) => {
         tags: req.body.tags.split(","),
       },
       { new: true }
-    );
+    ).populate({
+      path: "user",
+      select: "name",
+    });
 
     await fs.unlink(file.tempFilePath);
 
     return res.status(200).json({
       ok: true,
-      msg: "Post updated successfully",
+      msg: "Publicación actualizada",
       post,
     });
   } catch (error) {
     res.status(500).json({
       ok: false,
-      msg: "Contacting the admin",
+      msg: "Contacte al administrador",
     });
     console.log(error);
   }
@@ -255,7 +265,7 @@ postObj.deletePost = async (req, res = response) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(404).json({
         ok: false,
-        msg: "Id not valid",
+        msg: "Id no valido",
       });
     }
 
@@ -264,7 +274,7 @@ postObj.deletePost = async (req, res = response) => {
     if (!postSearch) {
       return res.status(404).json({
         ok: false,
-        msg: "This post not exist",
+        msg: "Esta publicación no existe",
       });
     }
 
@@ -273,12 +283,12 @@ postObj.deletePost = async (req, res = response) => {
 
     res.status(200).json({
       ok: true,
-      msg: "Post deleted successfully",
+      msg: "Publicación borrada",
     });
   } catch (error) {
     res.status(500).json({
       ok: false,
-      msg: "Contacting the admin",
+      msg: "Contacte al administrador",
     });
     console.log(error);
   }
@@ -295,7 +305,7 @@ postObj.likePost = async (req, res = response) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(404).json({
         ok: false,
-        msg: "Id not valid",
+        msg: "Id no valido",
       });
     }
 
@@ -304,7 +314,7 @@ postObj.likePost = async (req, res = response) => {
     if (!post) {
       return res.status(404).json({
         ok: false,
-        msg: "This post not exist",
+        msg: "Esta publicación no existe",
       });
     }
 
@@ -318,17 +328,20 @@ postObj.likePost = async (req, res = response) => {
 
     const postUpdated = await Post.findByIdAndUpdate(id, post, {
       new: true,
+    }).populate({
+      path: "user",
+      select: "name",
     });
 
     res.status(200).json({
       ok: true,
-      msg: "Post like+ successfully",
+      msg: "Te a gustado esta publicación",
       post: postUpdated,
     });
   } catch (error) {
     res.status(500).json({
       ok: false,
-      msg: "Contacting the admin",
+      msg: "Contacte al administrador",
     });
     console.log(error);
   }

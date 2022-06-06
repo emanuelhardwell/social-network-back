@@ -18,7 +18,7 @@ authObj.createUser = async (req, res = response) => {
     if (user) {
       return res.status(400).json({
         ok: false,
-        msg: "User is not available",
+        msg: "Usuario no valido",
       });
     }
 
@@ -34,7 +34,7 @@ authObj.createUser = async (req, res = response) => {
 
     res.status(200).json({
       ok: true,
-      msg: "User created successfully",
+      msg: "Usuario creado",
       uid: userSaved._id,
       name: userSaved.name,
       token,
@@ -42,7 +42,7 @@ authObj.createUser = async (req, res = response) => {
   } catch (error) {
     res.status(500).json({
       ok: false,
-      msg: "Contacting the admin",
+      msg: "Contacte al administrador",
     });
     console.log(error);
   }
@@ -60,7 +60,7 @@ authObj.loginUser = async (req, res = response) => {
     if (!user) {
       return res.status(400).json({
         ok: false,
-        msg: "User not found",
+        msg: "Usuario o contraseña icorrecta",
       });
     }
 
@@ -69,7 +69,7 @@ authObj.loginUser = async (req, res = response) => {
     if (!comparePassword) {
       return res.status(400).json({
         ok: false,
-        msg: "Password don´t match",
+        msg: "Contraseña icorrecta",
       });
     }
 
@@ -81,7 +81,7 @@ authObj.loginUser = async (req, res = response) => {
 
     res.status(200).json({
       ok: true,
-      msg: "Login successfully",
+      msg: "Inicio de sesión correcto",
       uid: user._id,
       name: user.name,
       token,
@@ -89,7 +89,7 @@ authObj.loginUser = async (req, res = response) => {
   } catch (error) {
     res.status(500).json({
       ok: false,
-      msg: "Contacting the admin",
+      msg: "Contacte al administrador",
     });
     console.log(error);
   }
@@ -108,7 +108,7 @@ authObj.renewToken = async (req, res = response) => {
 
     res.status(200).json({
       ok: true,
-      msg: "Renew token successfully",
+      msg: "El token a sido renovado",
       name,
       uid,
       token,
@@ -116,7 +116,7 @@ authObj.renewToken = async (req, res = response) => {
   } catch (error) {
     res.status(500).json({
       ok: false,
-      msg: "Contacting the admin",
+      msg: "Contacte al administrador",
     });
     console.log(error);
   }
