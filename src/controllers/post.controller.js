@@ -54,10 +54,16 @@ postObj.getPostsBySearch = async (req, res = response) => {
       tags = tags.toLowerCase();
       posts = await Post.find({
         $or: [{ title }, { tags: { $in: tags.split(",") } }],
+      }).populate({
+        path: "user",
+        select: "name",
       });
     } else {
       posts = await Post.find({
         $or: [{ title }],
+      }).populate({
+        path: "user",
+        select: "name",
       });
     }
 
