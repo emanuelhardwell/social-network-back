@@ -13,6 +13,46 @@ cloudinary.config({
 });
 
 /**
+ * ******************** GET POST BY ID  ********************
+ */
+postObj.getPostById = async (req, res = response) => {
+  const { id } = req.params;
+
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({
+        ok: false,
+        msg: "Id no valido",
+      });
+    }
+
+    const postSearch = await Post.findById(id).populate({
+      path: "user",
+      select: "name",
+    });
+
+    if (!postSearch) {
+      return res.status(404).json({
+        ok: false,
+        msg: "Esta publicación no existe",
+      });
+    }
+
+    res.status(200).json({
+      ok: true,
+      msg: "Publicación obtenida",
+      post: postSearch,
+    });
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      msg: "Contacte al administrador",
+    });
+    console.log(error);
+  }
+};
+
+/**
  * ******************** GET POSTS  ********************
  */
 postObj.getPosts = async (req, res = response) => {
@@ -85,7 +125,11 @@ postObj.getPostsBySearch = async (req, res = response) => {
  * ******************** GET POSTS BY PAGINATION ********************
  */
 postObj.getPostsByPagination = async (req, res = response) => {
-  const { page } = req.query;
+  let { page } = req.query;
+
+  if (page === undefined || page === "" || page == 0) {
+    page = 1;
+  }
 
   try {
     const posts = await Post.countDocuments();
@@ -97,7 +141,11 @@ postObj.getPostsByPagination = async (req, res = response) => {
     const postsGet = await Post.find()
       .sort({ _id: -1 })
       .limit(LIMIT)
-      .skip(startIndex);
+      .skip(startIndex)
+      .populate({
+        path: "user",
+        select: "name",
+      });
 
     res.status(200).json({
       ok: true,
@@ -141,7 +189,7 @@ postObj.createPost = async (req, res = response) => {
     if (file.mimetype !== "image/jpeg" && file.mimetype !== "image/png") {
       return res.status(400).json({
         ok: false,
-        msg: "El formato de imagen es incorrecto",
+        msg: "Formato de imagen no valido, unicamente se aceptan jpeg, jpg, png",
       });
     }
 
@@ -218,7 +266,7 @@ postObj.updatePost = async (req, res = response) => {
     if (file.mimetype !== "image/jpeg" && file.mimetype !== "image/png") {
       return res.status(400).json({
         ok: false,
-        msg: "El formato de imagen es incorrecto",
+        msg: "Formato de imagen no valido, unicamente se aceptan jpeg, jpg, png",
       });
     }
 

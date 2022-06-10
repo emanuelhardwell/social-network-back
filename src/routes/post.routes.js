@@ -8,6 +8,7 @@ const {
   likePost,
   getPostsBySearch,
   getPostsByPagination,
+  getPostById,
 } = require("../controllers/post.controller");
 const { check } = require("express-validator");
 const { validateInputs } = require("../middlewares/validate-inputs");
@@ -23,6 +24,11 @@ router.use(validateJWT);
  * ******************** GET POSTS  ********************
  */
 router.get("/", getPosts);
+
+/**
+ * ******************** GET POST BY ID  ********************
+ */
+router.get("/post/:id", getPostById);
 
 /**
  * ******************** GET POSTS BY SEARCH  ********************
