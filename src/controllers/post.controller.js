@@ -28,7 +28,7 @@ postObj.getPostById = async (req, res = response) => {
 
     const postSearch = await Post.findById(id).populate({
       path: "user",
-      select: "name",
+      select: "name lastname",
     });
 
     if (!postSearch) {
