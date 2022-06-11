@@ -26,10 +26,15 @@ postObj.getPostById = async (req, res = response) => {
       });
     }
 
-    const postSearch = await Post.findById(id).populate({
-      path: "user",
-      select: "name lastname",
-    });
+    const postSearch = await Post.findById(id)
+      .populate({
+        path: "user",
+        select: "name lastname",
+      })
+      .populate({
+        path: "comments.user",
+        select: "name lastname",
+      });
 
     if (!postSearch) {
       return res.status(404).json({
@@ -390,6 +395,65 @@ postObj.likePost = async (req, res = response) => {
     res.status(200).json({
       ok: true,
       msg: "Te a gustado esta publicación",
+      post: postUpdated,
+    });
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      msg: "Contacte al administrador",
+    });
+    console.log(error);
+  }
+};
+
+/**
+ * ******************** COMMENT POST  ********************
+ */
+postObj.commentPost = async (req, res = response) => {
+  const { id } = req.params;
+  const uid = req.uid;
+  const { comment } = req.body;
+
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({
+        ok: false,
+        msg: "Id no valido",
+      });
+    }
+
+    const post = await Post.findById(id);
+
+    if (!post) {
+      return res.status(404).json({
+        ok: false,
+        msg: "Esta publicación no existe",
+      });
+    }
+
+    // const index = post.likes.findIndex((id) => String(id) === uid);
+
+    // if (index === -1) {
+    post.comments.push({ user: uid, comment });
+    // } else {
+    //   post.likes = post.likes.filter((id) => String(id) !== uid);
+    // }
+
+    const postUpdated = await Post.findByIdAndUpdate(id, post, {
+      new: true,
+    })
+      .populate({
+        path: "user",
+        select: "name lastname",
+      })
+      .populate({
+        path: "comments.user",
+        select: "name lastname",
+      });
+
+    res.status(200).json({
+      ok: true,
+      msg: "Has comentado esta publicación",
       post: postUpdated,
     });
   } catch (error) {

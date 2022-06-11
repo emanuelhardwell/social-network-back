@@ -9,6 +9,7 @@ const {
   getPostsBySearch,
   getPostsByPagination,
   getPostById,
+  commentPost,
 } = require("../controllers/post.controller");
 const { check } = require("express-validator");
 const { validateInputs } = require("../middlewares/validate-inputs");
@@ -72,6 +73,11 @@ router.put(
  * ******************** LIKE POST  ********************
  */
 router.put("/like/:id", likePost);
+
+/**
+ * ******************** COMMENT POST  ********************
+ */
+router.put("/comment/:id", commentPost);
 
 /**
  * ******************** DELETE POST  ********************

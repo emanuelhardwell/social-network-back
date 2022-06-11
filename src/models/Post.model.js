@@ -30,6 +30,23 @@ const postSchema = Schema(
         ref: "User",
       },
     ],
+    comments: [
+      {
+        user: {
+          type: Schema.Types.ObjectId,
+          required: true,
+          ref: "User",
+        },
+        comment: {
+          type: String,
+          required: true,
+        },
+        createdAt: {
+          type: Date,
+          default: new Date().toLocaleString(),
+        },
+      },
+    ],
     createdAtDate: {
       type: Date,
       default: new Date().toISOString(),
