@@ -41,15 +41,15 @@ const postSchema = Schema(
           type: String,
           required: true,
         },
-        createdAt: {
+        createdAtDate: {
           type: Date,
-          default: new Date().toLocaleString(),
+          default: Date.now,
         },
       },
     ],
     createdAtDate: {
       type: Date,
-      default: new Date().toISOString(),
+      default:  Date.now,
     },
     user: {
       type: Schema.Types.ObjectId,
