@@ -10,6 +10,7 @@ const {
   getPostsByPagination,
   getPostById,
   commentPost,
+  deleteComment,
 } = require("../controllers/post.controller");
 const { check } = require("express-validator");
 const { validateInputs } = require("../middlewares/validate-inputs");
@@ -78,6 +79,11 @@ router.put("/like/:id", likePost);
  * ******************** COMMENT POST  ********************
  */
 router.put("/comment/:id", commentPost);
+
+/**
+ * ******************** COMMENT DELETE  ********************
+ */
+router.delete("/comment/:id", deleteComment);
 
 /**
  * ******************** DELETE POST  ********************

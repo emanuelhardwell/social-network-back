@@ -354,6 +354,65 @@ postObj.deletePost = async (req, res = response) => {
 };
 
 /**
+ * ******************** COMMENT DELETE  ********************
+ */
+postObj.deleteComment = async (req, res = response) => {
+  const { idPost } = req.query;
+  const { idComment } = req.query;
+
+  try {
+    if (
+      !mongoose.Types.ObjectId.isValid(idPost) ||
+      !mongoose.Types.ObjectId.isValid(idComment)
+    ) {
+      return res.status(404).json({
+        ok: false,
+        msg: "Id no valido",
+      });
+    }
+
+    const postSearch = await Post.findById(idPost);
+
+    if (!postSearch) {
+      return res.status(404).json({
+        ok: false,
+        msg: "Esta publicación no existe",
+      });
+    }
+
+    const comments = postSearch.comments.filter(
+      (comment) => String(comment._id) !== idComment
+    );
+
+    const post = await Post.findByIdAndUpdate(
+      idPost,
+      { comments },
+      { new: true }
+    )
+      .populate({
+        path: "user",
+        select: "name lastname",
+      })
+      .populate({
+        path: "comments.user",
+        select: "name lastname",
+      });
+
+    res.status(200).json({
+      ok: true,
+      msg: "Comentario borrado",
+      post,
+    });
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      msg: "Contacte al administrador",
+    });
+    console.log(error);
+  }
+};
+
+/**
  * ******************** LIKE POST  ********************
  */
 postObj.likePost = async (req, res = response) => {
