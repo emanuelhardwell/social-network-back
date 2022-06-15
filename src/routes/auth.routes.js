@@ -7,6 +7,8 @@ const {
   createUser,
   loginUser,
   renewToken,
+  backup,
+  restore,
 } = require("../controllers/auth.controller");
 
 const router = Router();
@@ -52,5 +54,15 @@ router.post(
  * ******************** RENEW TOKEN USER  ********************
  */
 router.get("/renew", validateJWT, renewToken);
+
+/**
+ * ******************** BACKUP ********************
+ */
+router.get("/backup", backup);
+
+/**
+ * ******************** RESTORE ********************
+ */
+router.get("/restore", restore);
 
 module.exports = router;
