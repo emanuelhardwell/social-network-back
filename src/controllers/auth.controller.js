@@ -2,6 +2,10 @@ const User = require("../models/User.model");
 const { response } = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const {
+  handleErrorResponse,
+  handleInternalServerError,
+} = require("../helpers/handleError");
 
 const authObj = {};
 
@@ -16,10 +20,7 @@ authObj.createUser = async (req, res = response) => {
     let user = await User.findOne({ email });
 
     if (user) {
-      return res.status(400).json({
-        ok: false,
-        msg: "Usuario no valido",
-      });
+      return handleErrorResponse(res, "Usuario no valido", 400);
     }
 
     user = new User(req.body);
@@ -40,11 +41,7 @@ authObj.createUser = async (req, res = response) => {
       token,
     });
   } catch (error) {
-    res.status(500).json({
-      ok: false,
-      msg: "Contacte al administrador",
-    });
-    console.log(error);
+    handleInternalServerError(res, error);
   }
 };
 
@@ -58,19 +55,13 @@ authObj.loginUser = async (req, res = response) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(400).json({
-        ok: false,
-        msg: "Usuario o contraseña icorrecta",
-      });
+      return handleErrorResponse(res, "Usuario o contraseña icorrecta", 400);
     }
 
     const comparePassword = await bcrypt.compare(password, user.password);
 
     if (!comparePassword) {
-      return res.status(400).json({
-        ok: false,
-        msg: "Contraseña icorrecta",
-      });
+      return handleErrorResponse(res, "Contraseña icorrecta", 400);
     }
 
     const token = await jwt.sign(
@@ -87,11 +78,7 @@ authObj.loginUser = async (req, res = response) => {
       token,
     });
   } catch (error) {
-    res.status(500).json({
-      ok: false,
-      msg: "Contacte al administrador",
-    });
-    console.log(error);
+    handleInternalServerError(res, error);
   }
 };
 
@@ -114,11 +101,7 @@ authObj.renewToken = async (req, res = response) => {
       token,
     });
   } catch (error) {
-    res.status(500).json({
-      ok: false,
-      msg: "Contacte al administrador",
-    });
-    console.log(error);
+    handleInternalServerError(res, error);
   }
 };
 
