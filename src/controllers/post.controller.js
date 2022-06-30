@@ -3,6 +3,10 @@ const cloudinary = require("cloudinary");
 const fs = require("fs-extra");
 const Post = require("../models/Post.model");
 const mongoose = require("mongoose");
+const {
+  handleErrorResponse,
+  handleInternalServerError,
+} = require("../helpers/handleError");
 
 const postObj = {};
 
@@ -20,10 +24,7 @@ postObj.getPostById = async (req, res = response) => {
 
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(404).json({
-        ok: false,
-        msg: "Id no valido",
-      });
+      return handleErrorResponse(res, "Id no valido", 404);
     }
 
     const postSearch = await Post.findById(id)
@@ -37,10 +38,7 @@ postObj.getPostById = async (req, res = response) => {
       });
 
     if (!postSearch) {
-      return res.status(404).json({
-        ok: false,
-        msg: "Esta publicación no existe",
-      });
+      return handleErrorResponse(res, "Esta publicación no existe", 404);
     }
 
     res.status(200).json({
@@ -49,11 +47,7 @@ postObj.getPostById = async (req, res = response) => {
       post: postSearch,
     });
   } catch (error) {
-    res.status(500).json({
-      ok: false,
-      msg: "Contacte al administrador",
-    });
-    console.log(error);
+    handleInternalServerError(res, error);
   }
 };
 
@@ -73,11 +67,7 @@ postObj.getPosts = async (req, res = response) => {
       posts,
     });
   } catch (error) {
-    res.status(500).json({
-      ok: false,
-      msg: "Contacte al administrador",
-    });
-    console.log(error);
+    handleInternalServerError(res, error);
   }
 };
 
@@ -118,11 +108,7 @@ postObj.getPostsBySearch = async (req, res = response) => {
       posts,
     });
   } catch (error) {
-    res.status(500).json({
-      ok: false,
-      msg: "Contacte al administrador",
-    });
-    console.log(error);
+    handleInternalServerError(res, error);
   }
 };
 
@@ -160,11 +146,7 @@ postObj.getPostsByPagination = async (req, res = response) => {
       numberOfPages,
     });
   } catch (error) {
-    res.status(500).json({
-      ok: false,
-      msg: "Contacte al administrador",
-    });
-    console.log(error);
+    handleInternalServerError(res, error);
   }
 };
 
@@ -176,26 +158,21 @@ postObj.createPost = async (req, res = response) => {
 
   try {
     if (!req.files || !req.files.image || Object.keys(req.files).length === 0) {
-      return res.status(400).json({
-        ok: false,
-        msg: "Imagen no cargada",
-      });
+      return handleErrorResponse(res, "Imagen no cargada", 400);
     }
 
     const file = req.files.image;
 
     if (file.size > 2000000) {
-      return res.status(400).json({
-        ok: false,
-        msg: "Imagen demasiado grande",
-      });
+      return handleErrorResponse(res, "Imagen demasiado grande", 400);
     }
 
     if (file.mimetype !== "image/jpeg" && file.mimetype !== "image/png") {
-      return res.status(400).json({
-        ok: false,
-        msg: "Formato de imagen no valido, unicamente se aceptan jpeg, jpg, png",
-      });
+      return handleErrorResponse(
+        res,
+        "Formato de imagen no valido, unicamente se aceptan jpeg, jpg, png",
+        400
+      );
     }
 
     const result = await cloudinary.v2.uploader.upload(file.tempFilePath, {
@@ -221,11 +198,7 @@ postObj.createPost = async (req, res = response) => {
       post: postPopulate,
     });
   } catch (error) {
-    res.status(500).json({
-      ok: false,
-      msg: "Contacte al administrador",
-    });
-    console.log(error);
+    handleInternalServerError(res, error);
   }
 };
 
@@ -237,42 +210,31 @@ postObj.updatePost = async (req, res = response) => {
 
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(404).json({
-        ok: false,
-        msg: "Id no valido",
-      });
+      return handleErrorResponse(res, "Id no valido", 404);
     }
 
     const postSearch = await Post.findById(id);
 
     if (!postSearch) {
-      return res.status(404).json({
-        ok: false,
-        msg: "Esta publicación no existe",
-      });
+      return handleErrorResponse(res, "Esta publicación no existe", 404);
     }
 
     if (!req.files || !req.files.image || Object.keys(req.files).length === 0) {
-      return res.status(400).json({
-        ok: false,
-        msg: "Imagen no seleccionada",
-      });
+      return handleErrorResponse(res, "Imagen no seleccionada", 400);
     }
 
     const file = req.files.image;
 
     if (file.size > 2000000) {
-      return res.status(400).json({
-        ok: false,
-        msg: "Imagen demasiado grande",
-      });
+      return handleErrorResponse(res, "Imagen demasiado grande", 400);
     }
 
     if (file.mimetype !== "image/jpeg" && file.mimetype !== "image/png") {
-      return res.status(400).json({
-        ok: false,
-        msg: "Formato de imagen no valido, unicamente se aceptan jpeg, jpg, png",
-      });
+      return handleErrorResponse(
+        res,
+        "Formato de imagen no valido, unicamente se aceptan jpeg, jpg, png",
+        400
+      );
     }
 
     await cloudinary.v2.uploader.destroy(postSearch.imageId);
@@ -306,11 +268,7 @@ postObj.updatePost = async (req, res = response) => {
       post,
     });
   } catch (error) {
-    res.status(500).json({
-      ok: false,
-      msg: "Contacte al administrador",
-    });
-    console.log(error);
+    handleInternalServerError(res, error);
   }
 };
 
@@ -322,19 +280,13 @@ postObj.deletePost = async (req, res = response) => {
 
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(404).json({
-        ok: false,
-        msg: "Id no valido",
-      });
+      return handleErrorResponse(res, "Id no valido", 404);
     }
 
     const postSearch = await Post.findById(id);
 
     if (!postSearch) {
-      return res.status(404).json({
-        ok: false,
-        msg: "Esta publicación no existe",
-      });
+      return handleErrorResponse(res, "Esta publicación no existe", 404);
     }
 
     await Post.findByIdAndDelete(id);
@@ -345,11 +297,7 @@ postObj.deletePost = async (req, res = response) => {
       msg: "Publicación borrada",
     });
   } catch (error) {
-    res.status(500).json({
-      ok: false,
-      msg: "Contacte al administrador",
-    });
-    console.log(error);
+    handleInternalServerError(res, error);
   }
 };
 
@@ -365,19 +313,13 @@ postObj.deleteComment = async (req, res = response) => {
       !mongoose.Types.ObjectId.isValid(idPost) ||
       !mongoose.Types.ObjectId.isValid(idComment)
     ) {
-      return res.status(404).json({
-        ok: false,
-        msg: "Id no valido",
-      });
+      return handleErrorResponse(res, "Id no valido", 404);
     }
 
     const postSearch = await Post.findById(idPost);
 
     if (!postSearch) {
-      return res.status(404).json({
-        ok: false,
-        msg: "Esta publicación no existe",
-      });
+      return handleErrorResponse(res, "Esta publicación no existe", 404);
     }
 
     const comments = postSearch.comments.filter(
@@ -404,11 +346,7 @@ postObj.deleteComment = async (req, res = response) => {
       post,
     });
   } catch (error) {
-    res.status(500).json({
-      ok: false,
-      msg: "Contacte al administrador",
-    });
-    console.log(error);
+    handleInternalServerError(res, error);
   }
 };
 
@@ -421,19 +359,13 @@ postObj.likePost = async (req, res = response) => {
 
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(404).json({
-        ok: false,
-        msg: "Id no valido",
-      });
+      return handleErrorResponse(res, "Id no valido", 404);
     }
 
     const post = await Post.findById(id);
 
     if (!post) {
-      return res.status(404).json({
-        ok: false,
-        msg: "Esta publicación no existe",
-      });
+      return handleErrorResponse(res, "Esta publicación no existe", 404);
     }
 
     const index = post.likes.findIndex((id) => String(id) === uid);
@@ -457,11 +389,7 @@ postObj.likePost = async (req, res = response) => {
       post: postUpdated,
     });
   } catch (error) {
-    res.status(500).json({
-      ok: false,
-      msg: "Contacte al administrador",
-    });
-    console.log(error);
+    handleInternalServerError(res, error);
   }
 };
 
@@ -475,19 +403,13 @@ postObj.commentPost = async (req, res = response) => {
 
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(404).json({
-        ok: false,
-        msg: "Id no valido",
-      });
+      return handleErrorResponse(res, "Id no valido", 404);
     }
 
     const post = await Post.findById(id);
 
     if (!post) {
-      return res.status(404).json({
-        ok: false,
-        msg: "Esta publicación no existe",
-      });
+      return handleErrorResponse(res, "Esta publicación no existe", 404);
     }
 
     // const index = post.likes.findIndex((id) => String(id) === uid);
@@ -516,11 +438,7 @@ postObj.commentPost = async (req, res = response) => {
       post: postUpdated,
     });
   } catch (error) {
-    res.status(500).json({
-      ok: false,
-      msg: "Contacte al administrador",
-    });
-    console.log(error);
+    handleInternalServerError(res, error);
   }
 };
 
