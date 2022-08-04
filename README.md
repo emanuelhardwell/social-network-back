@@ -30,7 +30,7 @@ Necesitas crear un archivo **.env** y rellenarlo con tus credenciales (ejemplo -
 - **CLOUDINARY_API_KEY**: API Key.
 - **CLOUDINARY_API_SECRET**: API Secret.
 
-## - 🌐 Entorno de desarrollo y producción utilizando node:
+## - 🌐 Entorno de desarrollo y producción:
 
 ```
 npm start   # Levanta el entorno de producción.
