@@ -3,7 +3,7 @@
 <img width="200" src="https://res.cloudinary.com/emanuel-hardwell/image/upload/v1659587554/dise%C3%B1o/favicon_rce5fa.png" /><br />
 <strong>SOCIAL NETWORK BACKEND 🚀</strong>
 
-🔗 **Link del proyecto en producción** 🚀-> https://social-networks-front-v1.vercel.app<br />
+🔗 **Link del proyecto en producción** -> https://social-networks-front-v1.vercel.app<br />
 El frontend esta en otro proyecto, llamado social network frontend.<br />
 
 </div>
