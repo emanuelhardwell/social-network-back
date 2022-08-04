@@ -21,7 +21,8 @@ El frontend esta en otro proyecto, llamado social network frontend.<br />
 - [4] Copiar API Secret 🔒 **Activar visibilidad para poder copiar la clave.**
 - [5] La base de datos la puedes crear en : https://www.mongodb.com/es/atlas/database 💾.
 
-## - 👀 Consideraciones, necesitas crear un archivo .env y rellenarlo con tus credenciales (ejemplo en .env.example):
+## - 👀 Consideraciones:
+Necesitas crear un archivo .env y rellenarlo con tus credenciales (ejemplo -> .env.example)
 
 - **DB_CNN**: Conexión a la Base de datos MongoDB.
 - **SECRET_JWT**: Crear una clave, procura que se dificial de adivinar.
