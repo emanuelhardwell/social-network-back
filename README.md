@@ -4,7 +4,7 @@
 <strong>SOCIAL NETWORK BACKEND 🚀</strong>
 
 🔗 **Link del proyecto en producción** -> https://social-networks-front-v1.vercel.app<br />
-A full-stack social-network project built with Nodejs, Express, MongoDB, Mongoose(ODM).
+A full-stack social-network project built with Nodejs, Express, MongoDB, Mongoose(ODM).<br />
 El frontend esta en otro proyecto, llamado social network frontend.<br />
 
 </div>
