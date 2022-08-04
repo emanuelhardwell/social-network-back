@@ -1,20 +1,20 @@
 <div align="center">
 
-<img width="200" src="http://cdn.mcauto-images-production.sendgrid.net/2badb1a48c268c94/d44e4553-c6e9-4a80-851a-4c937f2a2e7d/512x512.png" /><br />
+<img width="200" src="https://res.cloudinary.com/emanuel-hardwell/image/upload/v1659587554/dise%C3%B1o/favicon_rce5fa.png" /><br />
 <strong>SOCIAL NETWORK BACKEND 🚀</strong>
 
-🔗 Link del proyecto en producción 🚀-> https://social-networks-front-v1.vercel.app<br />
-**El frontend esta en otro proyecto, llamado social network frontend.**<br />
+🔗 **Link del proyecto en producción** 🚀-> https://social-networks-front-v1.vercel.app<br />
+El frontend esta en otro proyecto, llamado social network frontend.<br />
 
 </div>
 
-## - 📦 Install dependencies:
+## - 📦 Instalar dependencias:
 
 - [1] npm install
 
 ## - ⚠️ Requisitos:
 
-- [1] Registrarse en Cloudinary -> https://cloudinary.com/ 📷.
+- [1] Registrarse en Cloudinary -> https://cloudinary.com 📷.
 - [2] copiar Cloud Name ☁️.
 - [3] Copiar API Key 🔑.
 - [4] Copiar API Secret 🔒 **Activar visibilidad para poder copiar la clave.**
