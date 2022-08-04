@@ -4,6 +4,7 @@
 <strong>SOCIAL NETWORK BACKEND 🚀</strong>
 
 🔗 **Link del proyecto en producción** -> https://social-networks-front-v1.vercel.app<br />
+A full-stack social-network project built with Nodejs, Express, MongoDB, Mongoose(ODM).
 El frontend esta en otro proyecto, llamado social network frontend.<br />
 
 </div>
@@ -22,10 +23,19 @@ El frontend esta en otro proyecto, llamado social network frontend.<br />
 
 ## - 👀 Consideraciones, necesitas crear un archivo .env y rellenarlo con tus credenciales (ejemplo en .env.example):
 
-- **DB_CNN**: Conexión a la Base de datos Mongo.
+- **DB_CNN**: Conexión a la Base de datos MongoDB.
 - **SECRET_JWT**: Crear una clave, procura que se dificial de adivinar.
-- **CLOUDINARY_CLOUD_NAME**: Cloud Name
-- **CLOUDINARY_API_KEY**: API Key
-- **CLOUDINARY_API_SECRET**: API Secret
+- **CLOUDINARY_CLOUD_NAME**: Cloud Name.
+- **CLOUDINARY_API_KEY**: API Key.
+- **CLOUDINARY_API_SECRET**: API Secret.
 
-[🐈 Muchos más proyectos disponibles en mi GitHub](https://github.com/emanuelhardwell)
+## - 🌐 Entorno de desarrollo y producción utilizando node:
+
+```
+npm start   # Levanta el entorno de producción.
+npm run dev   # Levanta el entorno de desarrollo.
+```
+
+[Emanuel Vasquez Web](https://emanuelhardwell.github.io)
+
+⌨️ Made with ❤️
