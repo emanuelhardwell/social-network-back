@@ -34,7 +34,7 @@ Necesitas crear un archivo **.env** y rellenarlo con tus credenciales (ejemplo -
 
 ```
 npm start   # Levanta el entorno de producción.
-npm run dev   # Levanta el entorno de desarrollo.
+npm run dev   # Levanta el entorno de desarrollo (development).
 ```
 
 [Emanuel Vasquez Web](https://emanuelhardwell.github.io)
