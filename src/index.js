@@ -7,7 +7,7 @@ const fileupload = require("express-fileupload");
 
 const app = express();
 
-// use of DB
+// db
 dbConnection();
 
 // cors
@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(fileupload({ useTempFiles: true, tempFileDir: "/tmp/" }));
 
-// rutas
+// routes
 app.use("/api/v1/auth", require("./routes/auth.routes"));
 app.use("/api/v1/post", require("./routes/post.routes"));
 
